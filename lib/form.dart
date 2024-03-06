@@ -31,13 +31,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
+  final _nomeController = TextEditingController();
+  final _idadeController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _cellController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
     });
   }
 
@@ -54,49 +56,79 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 60,
       ),
       body:  Padding(
-        padding: EdgeInsets.all(40.0),
-        child: Column(
-          children: [
+        padding: const EdgeInsets.all(40.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+          children: <Widget> [
             const Text('Seja bem vindo! Aplicativo para \n entrada de dados',
               style: TextStyle(color: Colors.lightBlue, fontSize: 18),
             ),
-           const Padding(
-              padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-              child: TextField(
-                decoration: InputDecoration(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+              child: TextFormField(
+                controller: _nomeController,
+                decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   hintText: 'Nome:'
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Digite seu nome completo';
+                  }
+                    return null;
+                },
               ),
             ),
-           const Padding(
-              padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-              child: TextField(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+              child: TextFormField(
+                controller: _idadeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     hintText: 'Idade:'
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Digite sua idade';
+                  }
+                  return null;
+                },
                 maxLength: 3,
               ),
             ),
-           const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-              child: TextField(
-                decoration: InputDecoration(
+              child: TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     hintText: 'E-mail:'
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Digite seu email';
+                  }
+                  return null;
+                },
               ),
             ),
-           const Padding(
+           Padding(
               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-              child: TextField(
+              child: TextFormField(
+                controller: _cellController,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     hintText: 'Celular:'
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Digite seu número completo';
+                  }
+                  return null;
+                },
               ),
             ),
             Padding(
@@ -121,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             )
           ],
+          ),
         ),
       ),
     );
