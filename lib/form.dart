@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: UnderlineInputBorder(),
                     hintText: 'Idade:'
                 ),
+                maxLength: 3,
               ),
             ),
            const Padding(
