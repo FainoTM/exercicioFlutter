@@ -17,5 +17,4 @@ class User {
       'celular': celular,
     };
   }
-
 }

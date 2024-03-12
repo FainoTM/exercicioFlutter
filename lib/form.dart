@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'database/db_atividade.dart';
+import 'package:get/get.dart';
+import 'model/user.dart';
+import '../routes/AppRoutes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +42,25 @@ class _MyHomePageState extends State<MyHomePage> {
   final _cellController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final user = User(
+        nome: _nomeController.text,
+        idade: int.parse(_idadeController.text),
+        email: _emailController.text,
+        celular: _cellController.text,
+      );
+
+    //  UserProvider user2 =  UserProvider();
+
+     // print(user2.getUsers());
+      await DatabaseHelper.instance.addUser(user);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuário salvo com sucesso!')));
+    }
+  }
   void _incrementCounter() {
     setState(() {
     });
@@ -45,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
@@ -53,9 +80,17 @@ class _MyHomePageState extends State<MyHomePage> {
             widget.title,
             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+        actions: [
+          TextButton.icon(onPressed: (){
+            Get.offNamed(AppRoutes.LIST_USERS);
+          }, icon: Icon(Icons.arrow_back), label: Text('Voltar', style: TextStyle(color: Colors.white),))
+        ],
         toolbarHeight: 60,
       ),
-      body:  Padding(
+      body:
+      SingleChildScrollView( child:
+      Padding(
+
         padding: const EdgeInsets.all(40.0),
         child: Form(
           key: _formKey,
@@ -134,9 +169,16 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.only(top: 30),
               child: ElevatedButton.icon(
-                onPressed: () {
-                  if (_formKey.currentState != null) {
-                  _formKey.currentState!.reset();}
+                onPressed: () async{
+                  if (_formKey.currentState!.validate()) {
+                    await _submitForm();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Formulário Enviado!')));
+                    _nomeController.clear();
+                    _idadeController.clear();
+                    _emailController.clear();
+                    _cellController.clear();
+                  }
             },
                 icon: const Icon(Icons.save),
                 label: const Text('Salvar'),
@@ -156,6 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+      )
     );
   }
 }
